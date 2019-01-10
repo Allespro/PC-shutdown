@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+#Shutdown your PC when you need
+#TODO:
+#1)Time from that moment
+#Sorry for my English, I know it not wery good ~(-_-)~
 import time, re, os, sys, argparse
 
 class text:
@@ -32,15 +36,17 @@ def main():
 
 def execute(HOURS, MINUTES):
 	cmd = "shutdown -h " + HOURS + ":" + MINUTES
-	#os.system(cmd)
-	answ = input(text.RED + "Execute \'" + cmd + "\'? Y/n ")
-	if(answ == '' or answ == 'y' or answ == 'Y'):
-		print(cmd)
-	elif(answ == 'n' or answ == 'N'):
-		exit("Exit...")
-	else:
-		print("Error input, try again")
-	exit()
+	while True:
+		answ = input(text.RED + text.STRONG + "Execute \'" + cmd + "\'? Y/n: ")
+		if(answ == '' or answ == 'y' or answ == 'Y'):
+			print("Running: " + cmd)
+			os.system(cmd)
+			break
+		elif(answ == 'n' or answ == 'N'):
+			break
+		else:
+			print("Error input, try again")
+	exit("Exit...")
 
 def argload():
 	parser = argparse.ArgumentParser()
@@ -50,6 +56,7 @@ def argload():
 	arg = parser.parse_args()
 	if (format(arg.textgui) == '1'):
 		try:
+			os.system("clear")
 			main()
 		except KeyboardInterrupt:
 			os.system("clear")
@@ -79,5 +86,5 @@ if __name__ == '__main__':
     ''' + text.LIGHT_BLUE + '''By allespro 
     github.com/Allespro
     ''' + text.END
-    os.system("clear")
+    
     argload()
