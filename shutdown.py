@@ -33,8 +33,14 @@ def main():
 def execute(HOURS, MINUTES):
 	cmd = "shutdown -h " + HOURS + ":" + MINUTES
 	#os.system(cmd)
-	print(cmd)
-	return(1)
+	answ = input(text.RED + "Execute \'" + cmd + "\'? Y/n ")
+	if(answ == '' or answ == 'y' or answ == 'Y'):
+		print(cmd)
+	elif(answ == 'n' or answ == 'N'):
+		exit("Exit...")
+	else:
+		print("Error input, try again")
+	exit()
 
 def argload():
 	parser = argparse.ArgumentParser()
