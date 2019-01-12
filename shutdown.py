@@ -65,7 +65,7 @@ def main():
 		execute(HOURS, MINUTES, TYPE)
 	else:
 		execute(0, 0, TYPE)
-	print("execute: OK")
+	
 	exit("Exit...")
 
 
@@ -82,8 +82,10 @@ def execute(HOURS, MINUTES, TYPE):
 		if(answ == '' or answ == 'y' or answ == 'Y'):
 			print("Running: " + cmd)
 			os.system(cmd)
+			print("execute: OK")
 			break
 		elif(answ == 'n' or answ == 'N'):
+			print("execute: NO")
 			break
 		else:
 			print("Error input, try again")
