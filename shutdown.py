@@ -74,10 +74,11 @@ def main():
 	else:
 		execute(0, 0, TYPE)
 	
-	exit("Exit...")
+
 
 
 def execute(HOURS, MINUTES, TYPE):
+	cmd = ''
 	if(TYPE == 'at'):
 		cmd = "shutdown -h " + HOURS + ":" + MINUTES
 	if(TYPE == 'after'):
@@ -85,7 +86,7 @@ def execute(HOURS, MINUTES, TYPE):
 		cmd = "shutdown -h " + HALT_TIME
 	if(TYPE == 'cancel'):
 		cmd = "shutdown -c"
-	if(TYPE == 'halt'):
+	if(TYPE == 'stop'):
 		cmd = "shutdown -h now"
 	if(TYPE == 'reboot'):
 		cmd = "shutdown -r now"
@@ -95,9 +96,11 @@ def execute(HOURS, MINUTES, TYPE):
 			print("Running: " + cmd)
 			os.system(cmd)
 			print("execute: OK")
+			exit("Exit...")
 			break
 		elif(answ == 'n' or answ == 'N'):
 			print("execute: NO")
+			exit("Exit...")
 			break
 		else:
 			print("Error input, try again")
@@ -109,10 +112,26 @@ def argload():
 	if(len(sys.argv) == 1):
 		sys.argv[1:] = ["-h"]
 	parser = argparse.ArgumentParser()
+	parser.add_argument ( '--at',  action='store_const', const='1', help='At some time')
+	parser.add_argument ( '--after',  action='store_const', const='1', help='After some time')
 	parser.add_argument ('-M', '--minutes',  type=int, help='At how many mins')
 	parser.add_argument ('-H', '--hours',  type=int, help='At how many hours')
+	parser.add_argument ('-R', '--reboot',  action='store_const', const='1', help='Reboot now')
+	parser.add_argument ('-S', '--stop',  action='store_const', const='1', help='Halt now')
+	parser.add_argument ('-C', '--cancel',  action='store_const', const='1', help='Cancel all shutdowns')
 	parser.add_argument ('-G', '--textgui', action='store_const', const='1', help='Turn on text-ui')
 	arg = parser.parse_args()
+	if(str(format(arg.at)) == '1'):
+		execute((format(arg.hours)), (format(arg.minutes)), 'at')
+	if(str(format(arg.after)) == '1'):
+		execute((format(arg.hours)), (format(arg.minutes)), 'after')
+	if(str(format(arg.stop)) == '1'):
+		execute(0, 0, 'stop')
+	if(str(format(arg.reboot)) == '1'):
+		execute(0, 0, 'reboot')
+	if(str(format(arg.cancel)) == '1'):
+		execute(0, 0, 'cancel')
+
 	if (format(arg.textgui) == '1'):
 		try:
 			os.system("clear")
@@ -124,9 +143,10 @@ def argload():
 			time.sleep(0.5)
 			os.system("clear")
 			exit() 
-	if (int(format(arg.hours)) >= 24 or int(format(arg.minutes)) >= 60):
+	if ((int(format(arg.hours)) >= 24 or int(format(arg.minutes)) >= 60) and str(format(arg.after)) == '1'):
 		exit(text.RED + text.STRONG + "One ore more params is not true\nExit..." + text.END)
-	execute((format(arg.hours)), (format(arg.minutes)))
+
+
 
 if __name__ == '__main__':
     
@@ -146,5 +166,7 @@ if __name__ == '__main__':
     ''' + text.LIGHT_BLUE + '''By allespro 
     github.com/Allespro
     ''' + text.END
-    
-    argload()
+    try:
+        argload()
+    except KeyboardInterrupt:
+	        exit("\n" + text.GREEN + text.STRONG + "Exit..." + text.END) 
