@@ -21,19 +21,62 @@ class text:
 
 def main():
 	print(logo)
-	TIME = [100, 100]
-	while (((int (TIME[0])) >= 24) or ((int (TIME[1])) >= 60)):
-		TIME = input(text.GREEN + text.STRONG + "Shutdown time" + text.YELLOW + " HH MM" + text.END + text.GREEN + ": " + text.END)
-		TIME = (re.findall(r"[\w']+", TIME))
 
-	HOURS = str(TIME[0])
-	MINUTES = str(TIME[1])
-	execute(HOURS, MINUTES)
+	
+	while True:
+		print(text.GREEN + text.STRONG + "Select option" + text.END)
+		print(text.RED + text.STRONG + "[1] " + text.GREEN + "Shutdown after some time" + text.END)
+		print(text.RED + text.STRONG + "[2] " + text.GREEN + "Shutdown at some time" + text.END)
+		print(text.RED + text.STRONG + "[3] " + text.GREEN + "Cancel all shutdowns" + text.END)
+		SELECT = input(text.RED + text.STRONG + "Write here: " + text.END)
+		if(SELECT == '1'):
+			TYPE = 'after'
+			break
+		elif(SELECT == '2'):
+			TYPE = 'at'
+			break
+		elif(SELECT == '3'):
+			TYPE = 'cancel'
+			break
+		else:
+			print(text.RED + text.STRONG + "Error input" + text.END + "\n")
+			continue
+
+	if(TYPE == 'at'):
+		TIME = [100, 100]
+		while (True):
+			if(((int (TIME[0])) >= 24) or ((int (TIME[1])) >= 60)):
+				TIME = input(text.GREEN + text.STRONG + "Shutdown time at " + text.YELLOW + " HH MM" + text.END + text.GREEN + ": " + text.END)
+				TIME = (re.findall(r"[\w']+", TIME))
+				break
+				
+			else:
+				print(text.RED + text.STRONG + "Error pinput" + text.END + "\n")
+				continue
+
+	if(TYPE == 'after'):
+		while (True):
+			TIME = input(text.GREEN + text.STRONG + "Shutdown time ater" + text.YELLOW + " HH MM" + text.END + text.GREEN + ": " + text.END)
+			TIME = (re.findall(r"[\w']+", TIME))
+			break
+	if(TYPE == 'at' or TYPE == 'after'):
+		HOURS = str(TIME[0])
+		MINUTES = str(TIME[1])
+		execute(HOURS, MINUTES, TYPE)
+	else:
+		execute(0, 0, TYPE)
 	print("execute: OK")
+	exit("Exit...")
 
 
-def execute(HOURS, MINUTES):
-	cmd = "shutdown -h " + HOURS + ":" + MINUTES
+def execute(HOURS, MINUTES, TYPE):
+	if(TYPE == 'at'):
+		cmd = "shutdown -h " + HOURS + ":" + MINUTES
+	if(TYPE == 'after'):
+		HALT_TIME = str((int(HOURS) * 60) + int(MINUTES))
+		cmd = "shutdown -h " + HALT_TIME
+	if(TYPE == 'cancel'):
+		cmd = "shutdown -c"
 	while True:
 		answ = input(text.RED + text.STRONG + "Execute \'" + cmd + "\'? Y/n: ")
 		if(answ == '' or answ == 'y' or answ == 'Y'):
@@ -44,7 +87,7 @@ def execute(HOURS, MINUTES):
 			break
 		else:
 			print("Error input, try again")
-	exit("Exit...")
+
 
 def argload():
 	if os.geteuid() != 0:
