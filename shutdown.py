@@ -20,8 +20,6 @@ class text:
     END = '\x1b[0m'
 
 def main():
-	if os.geteuid() != 0:
-		exit(text.RED + text.STRONG + "Programm need root.\nPlease, try again with 'sudo'.\nExit..." + text.END)
 	print(logo)
 	TIME = [100, 100]
 	while (((int (TIME[0])) >= 24) or ((int (TIME[1])) >= 60)):
@@ -49,6 +47,10 @@ def execute(HOURS, MINUTES):
 	exit("Exit...")
 
 def argload():
+	if os.geteuid() != 0:
+		exit(text.RED + text.STRONG + "Programm need root.\nPlease, try again with 'sudo'.\nExit..." + text.END)
+	if(len(sys.argv) == 1):
+		sys.argv[1:] = ["-h"]
 	parser = argparse.ArgumentParser()
 	parser.add_argument ('-M', '--minutes',  type=int, help='At how many mins')
 	parser.add_argument ('-H', '--hours',  type=int, help='At how many hours')
@@ -70,6 +72,7 @@ def argload():
 	execute((format(arg.hours)), (format(arg.minutes)))
 
 if __name__ == '__main__':
+    
     
     logo = text.YELLOW + text.GLITCH + text.STRONG + '''
 
