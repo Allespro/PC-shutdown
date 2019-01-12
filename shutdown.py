@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #Shutdown your PC when you need
 #TODO:
-#1)Time from that moment
+#1)Reboot at and after
 #Sorry for my English, I know it not wery good ~(-_-)~
 import time, re, os, sys, argparse
 
@@ -28,6 +28,8 @@ def main():
 		print(text.RED + text.STRONG + "[1] " + text.GREEN + "Shutdown after some time" + text.END)
 		print(text.RED + text.STRONG + "[2] " + text.GREEN + "Shutdown at some time" + text.END)
 		print(text.RED + text.STRONG + "[3] " + text.GREEN + "Cancel all shutdowns" + text.END)
+		print(text.RED + text.STRONG + "[4] " + text.GREEN + "Shutdown PC now" + text.END)
+		print(text.RED + text.STRONG + "[5] " + text.GREEN + "Reboot PC now" + text.END)
 		SELECT = input(text.RED + text.STRONG + "Write here: " + text.END)
 		if(SELECT == '1'):
 			TYPE = 'after'
@@ -37,6 +39,12 @@ def main():
 			break
 		elif(SELECT == '3'):
 			TYPE = 'cancel'
+			break
+		elif(SELECT == '4'):
+			TYPE = 'halt'
+			break
+		elif(SELECT == '5'):
+			TYPE = 'reboot'
 			break
 		else:
 			print(text.RED + text.STRONG + "Error input" + text.END + "\n")
@@ -77,6 +85,10 @@ def execute(HOURS, MINUTES, TYPE):
 		cmd = "shutdown -h " + HALT_TIME
 	if(TYPE == 'cancel'):
 		cmd = "shutdown -c"
+	if(TYPE == 'halt'):
+		cmd = "shutdown -h now"
+	if(TYPE == 'reboot'):
+		cmd = "shutdown -r now"
 	while True:
 		answ = input(text.RED + text.STRONG + "Execute \'" + cmd + "\'? Y/n: ")
 		if(answ == '' or answ == 'y' or answ == 'Y'):
